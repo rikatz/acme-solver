@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1alpha3
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    email: your@email.com
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: example-issuer-account-key
+    solvers:
+    - dns01:
+            cnameStrategy: Follow
+            webhook:
+                    groupName: acme.example.com # Must be the same of webhook deployment
+                    solverName: nullsolver 
