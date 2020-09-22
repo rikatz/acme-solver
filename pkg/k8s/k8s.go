@@ -33,7 +33,7 @@ var (
 // GetChallenge picks an object name and a namespace and returns the challengeKey from ACME Challenges
 func GetChallenge(certname, namespace string, client cmclient.Interface) (challengeKey []string, err error) {
 
-	challengeList, err := client.AcmeV1alpha3().Challenges(namespace).List(context.TODO(), metav1.ListOptions{})
+	challengeList, err := client.AcmeV1().Challenges(namespace).List(context.TODO(), metav1.ListOptions{})
 
 	if apierrors.IsNotFound(err) {
 		return challengeKey, fmt.Errorf("No challenge found in Namespace %s", namespace)

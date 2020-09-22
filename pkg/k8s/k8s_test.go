@@ -23,52 +23,52 @@ import (
 	"github.com/jetstack/cert-manager/pkg/client/clientset/versioned/fake"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/jetstack/cert-manager/pkg/apis/acme/v1alpha3"
+	acmev1 "github.com/jetstack/cert-manager/pkg/apis/acme/v1"
 )
 
 func TestGetChallenge(t *testing.T) {
 
-	var challengeItems []v1alpha3.Challenge
+	var challengeItems []acmev1.Challenge
 
-	challenge1 := v1alpha3.Challenge{
+	challenge1 := acmev1.Challenge{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: "system1",
 			Name:      "testecert-example1-2368806360-178418311-1327617168",
 		},
-		Spec: v1alpha3.ChallengeSpec{
+		Spec: acmev1.ChallengeSpec{
 			DNSName: "testcert123.example.com",
 			Key:     "fdashfuadsjfuqaj832qFDSAFAEFcsdacadsZZXWSQADASXAS",
 		},
 	}
 
-	challenge2 := v1alpha3.Challenge{
+	challenge2 := acmev1.Challenge{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: "system1",
 			Name:      "testecert-example1-2368806360-178418311-2519715597",
 		},
-		Spec: v1alpha3.ChallengeSpec{
+		Spec: acmev1.ChallengeSpec{
 			DNSName: "testcert456.example.com",
 			Key:     "XXXXXXXXXAAAAAAAaaaaaaaaaaaaaaaaaAAAAAAAAa0000123",
 		},
 	}
 
-	challenge3 := v1alpha3.Challenge{
+	challenge3 := acmev1.Challenge{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: "system1",
 			Name:      "testecert-example1-2368806360-178418311-2999686616",
 		},
-		Spec: v1alpha3.ChallengeSpec{
+		Spec: acmev1.ChallengeSpec{
 			DNSName: "testcert789.example.com",
 			Key:     "123123123VVVVVvvvvvvvvvvvvvvvMMmmmmmMJHGFDSDFSDFSD",
 		},
 	}
 
-	challenge4 := v1alpha3.Challenge{
+	challenge4 := acmev1.Challenge{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: "system1",
 			Name:      "testecert-example1-2368806360-178418311-324176377",
 		},
-		Spec: v1alpha3.ChallengeSpec{
+		Spec: acmev1.ChallengeSpec{
 			DNSName: "testcert789.example.com",
 			Key:     "ThIsIsaS3cretKeyReturnedto4Cm3Challenge",
 		},
@@ -76,7 +76,7 @@ func TestGetChallenge(t *testing.T) {
 
 	challengeItems = append(challengeItems, challenge1, challenge2, challenge3, challenge4)
 
-	challengesList := v1alpha3.ChallengeList{
+	challengesList := acmev1.ChallengeList{
 		Items: challengeItems,
 	}
 
