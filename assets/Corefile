@@ -1,20 +1,33 @@
 solver.example.com {
+
     template IN SOA {
-      answer "{{ .Zone }} 60 IN SOA {{ .Zone }} admin.{{ .Zone }} (1 60 60 60 60)"
-      fallthrough
+      authority "{{ .Zone }} 60 IN SOA {{ .Zone }} admin1.{{ .Zone }} (1 60 60 60 60)"
+        fallthrough
     }
 
     template IN A {
       answer "{{ .Name }} 60 IN A 123.123.123.123"
-      fallthrough
+        fallthrough
+    }
+
+    # Remove if you dont have ipv6 in your env
+    template IN AAAA {
+      answer "{{ .Name }} 60 IN AAAA 2804::abcd"
+        fallthrough
+    }
+
+    template IN NS {
+      answer "{{ .Name }} 60 IN NS solver.example.com."
+        fallthrough
     }
 
     log
     errors
-    cancel
     reload
+    cancel 2s
+    grpc . 127.0.0.1:18853 {
+    
+    }
 
-    grpc . 127.0.0.1:18853
 
 }
-
