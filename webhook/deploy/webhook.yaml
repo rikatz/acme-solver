@@ -124,9 +124,8 @@ spec:
   type: ClusterIP
   ports:
     - port: 443
-      targetPort: https
+      targetPort: 8443 
       protocol: TCP
-      name: https
   selector:
     app: nullsolver-webhook
 
@@ -151,9 +150,10 @@ spec:
       serviceAccountName: nullsolver-webhook
       containers:
         - name: nullsolver-webhook
-          image: rpkatz/nullsolver-webhook:v1.0.0
+          image: rpkatz/nullsolver-webhook:v1.1.1
           imagePullPolicy: Always
           args:
+            - --secure-port=8443
             - --tls-cert-file=/tls/tls.crt
             - --tls-private-key-file=/tls/tls.key
           env:
@@ -167,12 +167,12 @@ spec:
             httpGet:
               scheme: HTTPS
               path: /healthz
-              port: https
+              port: 8443 
           readinessProbe:
             httpGet:
               scheme: HTTPS
               path: /healthz
-              port: https
+              port: 8443 
           volumeMounts:
             - name: certs
               mountPath: /tls
@@ -205,7 +205,7 @@ spec:
 ---
 # Create a selfsigned Issuer, in order to create a root CA certificate for
 # signing webhook serving certificates
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: nullsolver-webhook-selfsign
@@ -218,7 +218,7 @@ spec:
 ---
 
 # Generate a CA Certificate used to sign certificates for the webhook
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: nullsolver-webhook-ca
@@ -236,7 +236,7 @@ spec:
 ---
 
 # Create an Issuer that uses the above generated CA certificate to issue certs
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: nullsolver-webhook-ca
@@ -250,7 +250,7 @@ spec:
 ---
 
 # Finally, generate a serving certificate for the webhook to use
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: nullsolver-webhook-webhook-tls

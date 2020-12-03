@@ -8,7 +8,7 @@ import (
 	"github.com/jetstack/cert-manager/pkg/acme/webhook/apis/acme/v1alpha1"
 	"github.com/jetstack/cert-manager/pkg/acme/webhook/cmd"
 
-	"k8s.io/klog"
+	"k8s.io/klog/v2"
 )
 
 // GroupName defines the webhook groupName
