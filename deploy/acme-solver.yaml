@@ -54,11 +54,11 @@ spec:
       serviceAccountName: solver-account
       containers:
       - command:
-        - acme-solver
+        - /acme-solver
         - --domain=$(DOMAIN)
         - --in-cluster
         - --bind=:18853
-        image: rpkatz/acme-solver:v1.1.1
+        image: rpkatz/acme-solver:v1.1.2
         env:
         - name: DOMAIN
           value: "solver.mydomain.tld"

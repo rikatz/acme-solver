@@ -1,8 +1,6 @@
-FROM alpine:3.12
+FROM gcr.io/distroless/base-debian10 
 
-RUN apk add --no-cache ca-certificates
-
-COPY output/acme-solver /usr/local/bin/acme-solver
+COPY output/acme-solver /acme-solver
 
 USER nobody
-ENTRYPOINT ["acme-solver"]
+ENTRYPOINT ["/acme-solver"]
