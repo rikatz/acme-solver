@@ -4,4 +4,5 @@ RUN apk add --no-cache ca-certificates
 
 COPY output/acme-solver /usr/local/bin/acme-solver
 
+USER nobody
 ENTRYPOINT ["acme-solver"]

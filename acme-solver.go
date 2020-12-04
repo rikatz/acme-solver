@@ -26,6 +26,7 @@ import (
 	"google.golang.org/grpc"
 
 	cmclient "github.com/jetstack/cert-manager/pkg/client/clientset/versioned"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 )
@@ -36,6 +37,7 @@ const (
 
 var (
 	solverDomain, solverBind, solverIP, kubeconfig string
+	inCluster                                      bool
 	client                                         cmclient.Interface
 	err                                            error
 )
@@ -55,7 +57,14 @@ func main() {
 		solverDomain = solverDomain + "."
 	}
 
-	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
+	var config *rest.Config
+	var err error
+	if !inCluster {
+		config, err = clientcmd.BuildConfigFromFlags("", kubeconfig)
+	} else {
+		config, err = rest.InClusterConfig()
+	}
+
 	if err != nil {
 		panic(err)
 	}
@@ -84,6 +93,7 @@ func init() {
 
 	flag.StringVar(&solverDomain, "domain", "", "What's the domain of this solver. Can not be empty")
 	flag.StringVar(&solverBind, "bind", defaultBind, "What's the bind address of the daemon")
+	flag.BoolVar(&inCluster, "in-cluster", false, "If defined acme-solver will run in-cluster")
 
 	flag.Parse()
 }
