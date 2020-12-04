@@ -114,13 +114,19 @@ spec:
 ```
 
 ### CoreDNS + Acme Solver
-* Start the `acme-solver` remembering to replace the solver domain for your own, and also pointing to the right kubeconfig file
+* AcmeSolver can be deployed with the manifest contained in this repo:
 ```
- docker run --net=host --rm -v ~/.kube/config:/etc/kubeconfig rpkatz/acme-solver:v1.0.0 -kubeconfig /etc/kubeconfig -domain solver.example.com
- ```
+kubectl apply -f deploy/acme-solver.yaml
+```
+With the above command, acme-solver will be deployed in the current cluster 
+and exposed with a NodePort that can be gathered with:
+```
+kubectl get svc -n acme-solver acme-solver -o jsonpath='{.spec.ports[0].nodePort}
+```
 
 * Install CoreDNS and start the daemon using the available [Corefile](assets/Corefile). Please remember to change the configuration to reflect your solver domain, and the correct IP in the `A registry`. 
-* Still in Corefile configuration, point to the place were the Acme Solver gRPC Backend will be answering
+* Still in Corefile configuration, point to the place were the Acme Solver gRPC Backend will be answering. If you followed the above steps, it will be
+the address of one of your nodes, in the NodePort available for the service
 
 ### Testing the installation
 * Create an example certificate: ``kubectl apply -f  assets/certificate.yaml``
